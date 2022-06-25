@@ -1,17 +1,26 @@
 import { Piece } from './../database/entities/piece.entity';
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { CreatePieceRequestDto } from './dto/create-piece-request.dto';
+import { CreateUpdatePieceRequestDto } from './dto/create-piece-request.dto';
 
 @Injectable()
 export class PiecesService {
-    constructor(@Inject('PIECE_REPOSITORY') private pieceRepository: Repository<Piece>){}
-    
-    async findAll(): Promise<Piece[]>{
+    constructor(@Inject('PIECE_REPOSITORY') private pieceRepository: Repository<Piece>) { }
+
+    async findAll(): Promise<Piece[]> {
         return this.pieceRepository.find();
     }
 
-    async createPiece(piece:CreatePieceRequestDto): Promise<Piece>{
+    async createPiece(piece: CreateUpdatePieceRequestDto): Promise<Piece> {
         return this.pieceRepository.save(piece);
+    }
+
+    async updatePiece(id: string, piece: CreateUpdatePieceRequestDto):Promise<Piece>{
+        await this.pieceRepository.update(id, {...piece});
+        return await this.pieceRepository.findOne({where:{id:id}});
+    }
+
+    async deletePiece(id:number):Promise<void>{
+        await this.pieceRepository.delete(id);
     }
 }
