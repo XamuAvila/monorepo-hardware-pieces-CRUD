@@ -1,7 +1,7 @@
 import { CreateUpdatePieceRequestDto } from './dto/create-piece-request.dto';
 import { PiecesService } from './pieces.service';
-import { Piece } from './../database/entities/piece.entity';
 import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, Query } from '@nestjs/common';
+import { Piece } from '@app/database/entities/piece.entity';
 
 @Controller('pieces')
 export class PiecesController {

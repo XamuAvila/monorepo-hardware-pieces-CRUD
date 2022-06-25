@@ -1,11 +1,11 @@
+import { User } from './entities/user.entity';
 import { Piece } from './entities/piece.entity';
 import { DataSource } from 'typeorm';
 
 import * as dotenv from 'dotenv'
-import { join } from 'path';
 
 dotenv.config({
-    path: require.resolve("../../../../.env")
+    path: require.resolve("../../../.env")
 })
 
 export const databaseProviders = [
@@ -19,7 +19,7 @@ export const databaseProviders = [
         username:  process.env.POSTGRES_USER,
         password:  `${process.env.POSTGRES_PASSWORD}`,
         database: process.env.POSTGRES_DB,
-        entities:  [Piece],
+        entities:  [Piece, User],
         synchronize: process.env.POSTGRES_SYNC == "true",
       });
 

@@ -1,4 +1,4 @@
-import { Piece } from './../database/entities/piece.entity';
+import { Piece } from '@app/database/entities/piece.entity';
 import { DataSource } from 'typeorm';
 
 export const pieceProviders = [

@@ -1,4 +1,4 @@
-import { Piece } from './../database/entities/piece.entity';
+import { Piece } from '@app/database/entities/piece.entity';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CreateUpdatePieceRequestDto } from './dto/create-piece-request.dto';

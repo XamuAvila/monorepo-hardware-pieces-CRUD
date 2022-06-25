@@ -18,7 +18,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/hardware-pieces/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/hardware-pieces/test/jest-e2e.json",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "migration:create": "typeorm-ts-node-esm migration:create",
+    "migration:up": "typeorm-ts-node-esm -d ./libs/database/src/data-source.ts migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -73,7 +76,11 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
-    ]
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1"
+    }
   }
 }
