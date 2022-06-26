@@ -44,6 +44,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./apps/auth/src/auth.service.ts");
 let AuthController = class AuthController {
     constructor(authService) {
@@ -63,6 +64,7 @@ __decorate([
 ], AuthController.prototype, "login", null);
 AuthController = __decorate([
     (0, common_1.Controller)('api/auth'),
+    (0, swagger_1.ApiTags)('Auth'),
     __param(0, (0, common_1.Inject)(auth_service_1.AuthService)),
     __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
 ], AuthController);
@@ -417,6 +419,7 @@ const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport
 const create_piece_request_dto_1 = __webpack_require__(/*! ./dto/create-piece-request.dto */ "./apps/hardware-pieces/src/pieces/dto/create-piece-request.dto.ts");
 const pieces_service_1 = __webpack_require__(/*! ./pieces.service */ "./apps/hardware-pieces/src/pieces/pieces.service.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 let PiecesController = class PiecesController {
     constructor(piecesService) {
         this.piecesService = piecesService;
@@ -465,6 +468,7 @@ __decorate([
 PiecesController = __decorate([
     (0, common_1.Controller)('pieces'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, swagger_1.ApiTags)('Pieces'),
     __param(0, (0, common_1.Inject)(pieces_service_1.PiecesService)),
     __metadata("design:paramtypes", [typeof (_g = typeof pieces_service_1.PiecesService !== "undefined" && pieces_service_1.PiecesService) === "function" ? _g : Object])
 ], PiecesController);
@@ -604,9 +608,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserController = void 0;
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
 const user_service_1 = __webpack_require__(/*! ./user.service */ "./apps/hardware-pieces/src/user/user.service.ts");
 const create_user_request_dto_1 = __webpack_require__(/*! ./dto/create-user.request.dto */ "./apps/hardware-pieces/src/user/dto/create-user.request.dto.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -634,6 +640,8 @@ __decorate([
 ], UserController.prototype, "getUser", null);
 UserController = __decorate([
     (0, common_1.Controller)('user'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, swagger_1.ApiTags)('Users'),
     __param(0, (0, common_1.Inject)(user_service_1.UserService)),
     __metadata("design:paramtypes", [typeof (_d = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _d : Object])
 ], UserController);
@@ -1074,13 +1082,17 @@ const app_module_1 = __webpack_require__(/*! ./app.module */ "./apps/hardware-pi
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const config = new swagger_1.DocumentBuilder()
-        .setTitle('Cats example')
-        .setDescription('The cats API description')
+        .setTitle('Pc Pieces')
         .setVersion('1.0')
-        .addTag('cats')
+        .addBearerAuth()
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
-    swagger_1.SwaggerModule.setup('api', app, document);
+    swagger_1.SwaggerModule.setup('api', app, document, {
+        swaggerOptions: {
+            tagsSorter: 'alpha',
+            operationsSorter: 'alpha',
+        },
+    });
     await app.listen(3000);
 }
 bootstrap();

@@ -3,9 +3,11 @@ import { CreateUpdatePieceRequestDto } from './dto/create-piece-request.dto';
 import { PiecesService } from './pieces.service';
 import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { Piece } from '@app/database/entities/piece.entity';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('pieces')
 @UseGuards(AuthGuard('jwt'))
+@ApiTags('Pieces')
 export class PiecesController {
     constructor(@Inject(PiecesService) private piecesService: PiecesService) { }
     @Get()
