@@ -1,16 +1,6 @@
 # Computer pieces CRUD Repository on Postgres
-# Bearer Login
-```
-{
-	"email": "admin@admin.com",
-	"password": "password"
-}
-```
-## Steps to Use
 
-```bash
-$ npm install
-```
+## Steps to Use
 
 You need to set the .env variables
 ```
@@ -24,13 +14,14 @@ JWT_SECRET_KEY=anykey
 
 ```
 
+```bash
+$ npm install
+```
+
 ## After set the enviroment variables execute the following command to generate a user to authenticate on JWT
 ```
 npm run migration:up
 ```
-
-# Swagger Link
- *http://localhost:3000/api*
 ## Running the app
 
 ```bash
@@ -42,6 +33,17 @@ $ npm run start:dev
 
 ```
 
+# Bearer Login
+```
+{
+	"email": "admin@admin.com",
+	"password": "password"
+}
+```
+
+# Swagger Link
+ *http://localhost:3000/api*
+ 
 ## Test
 
 ```bash
