@@ -1,4 +1,11 @@
 # Computer pieces CRUD Repository on Postgres
+# Bearer Login
+```
+{
+	"email": "admin@admin.com",
+	"password": "password"
+}
+```
 ## Steps to Use
 
 ```bash

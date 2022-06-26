@@ -3,9 +3,10 @@ import { User } from './../../../../libs/database/src/entities/user.entity';
 import { UserService } from './user.service';
 import { CreateUserRequestDto } from './dto/create-user.request.dto';
 import { Body, Controller, Get, Inject, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
+@ApiBearerAuth('token')
 @UseGuards(AuthGuard('jwt'))
 @ApiTags('Users')
 export class UserController {

@@ -709,6 +709,7 @@ __decorate([
 ], UserController.prototype, "getUsers", null);
 UserController = __decorate([
     (0, common_1.Controller)('user'),
+    (0, swagger_1.ApiBearerAuth)('token'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, swagger_1.ApiTags)('Users'),
     __param(0, (0, common_1.Inject)(user_service_1.UserService)),
