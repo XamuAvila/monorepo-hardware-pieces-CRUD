@@ -7,7 +7,7 @@
   \**************/
 /***/ (() => {
 
-
+JWT_SECRET_KEY=gPwjG1GCfzzIdYcHIM4ZjT0sbohPUc66X97duW94blI=
 POSTGRES_HOST="localhost"
 POSTGRES_USER="root"
 POSTGRES_PASSWORD="root"
@@ -16,6 +16,246 @@ POSTGRES_PORT="5432"
 POSTGRES_SYNC="true"
 
 
+
+/***/ }),
+
+/***/ "./apps/auth/src/auth.controller.ts":
+/*!******************************************!*\
+  !*** ./apps/auth/src/auth.controller.ts ***!
+  \******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthController = void 0;
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./apps/auth/src/auth.service.ts");
+let AuthController = class AuthController {
+    constructor(authService) {
+        this.authService = authService;
+    }
+    login(user) {
+        return this.authService.login(user);
+    }
+};
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('local')),
+    (0, common_1.Post)('login'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "login", null);
+AuthController = __decorate([
+    (0, common_1.Controller)('api/auth'),
+    __param(0, (0, common_1.Inject)(auth_service_1.AuthService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+], AuthController);
+exports.AuthController = AuthController;
+
+
+/***/ }),
+
+/***/ "./apps/auth/src/auth.module.ts":
+/*!**************************************!*\
+  !*** ./apps/auth/src/auth.module.ts ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthModule = void 0;
+const jwt_strategy_1 = __webpack_require__(/*! ./strategies/jwt.strategy */ "./apps/auth/src/strategies/jwt.strategy.ts");
+const user_provider_1 = __webpack_require__(/*! ./../../hardware-pieces/src/user/user.provider */ "./apps/hardware-pieces/src/user/user.provider.ts");
+const database_module_1 = __webpack_require__(/*! ./../../../libs/database/src/database.module */ "./libs/database/src/database.module.ts");
+const user_service_1 = __webpack_require__(/*! ./../../hardware-pieces/src/user/user.service */ "./apps/hardware-pieces/src/user/user.service.ts");
+const local_strategy_1 = __webpack_require__(/*! ./strategies/local.strategy */ "./apps/auth/src/strategies/local.strategy.ts");
+const user_module_1 = __webpack_require__(/*! ./../../hardware-pieces/src/user/user.module */ "./apps/hardware-pieces/src/user/user.module.ts");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const auth_controller_1 = __webpack_require__(/*! ./auth.controller */ "./apps/auth/src/auth.controller.ts");
+const auth_service_1 = __webpack_require__(/*! ./auth.service */ "./apps/auth/src/auth.service.ts");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
+const path_1 = __webpack_require__(/*! path */ "path");
+const dotenv = __webpack_require__(/*! dotenv */ "dotenv");
+dotenv.config({ path: (0, path_1.join)(__dirname, "../../../.env") });
+let AuthModule = class AuthModule {
+};
+AuthModule = __decorate([
+    (0, common_1.Module)({
+        imports: [
+            database_module_1.DatabaseModule,
+            user_module_1.UserModule,
+            passport_1.PassportModule,
+            config_1.ConfigModule.forRoot(),
+            jwt_1.JwtModule.register({
+                privateKey: process.env.JWT_SECRET_KEY,
+            })
+        ],
+        controllers: [auth_controller_1.AuthController],
+        providers: [local_strategy_1.LocalStrategy, auth_service_1.AuthService, user_service_1.UserService, ...user_provider_1.userProviders, jwt_strategy_1.JwtStrategy],
+    })
+], AuthModule);
+exports.AuthModule = AuthModule;
+
+
+/***/ }),
+
+/***/ "./apps/auth/src/auth.service.ts":
+/*!***************************************!*\
+  !*** ./apps/auth/src/auth.service.ts ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthService = void 0;
+const user_service_1 = __webpack_require__(/*! ./../../hardware-pieces/src/user/user.service */ "./apps/hardware-pieces/src/user/user.service.ts");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
+let AuthService = class AuthService {
+    constructor(userService, jwtService) {
+        this.userService = userService;
+        this.jwtService = jwtService;
+    }
+    async login(user) {
+        const payload = { sub: user.id, email: user.email };
+        return {
+            token: this.jwtService.sign(payload)
+        };
+    }
+    async validateUser(email, password) {
+        const user = await this.userService.findOne(email);
+        if (!user) {
+            return null;
+        }
+        const isPasswordValid = user.password == password;
+        if (!isPasswordValid) {
+            return null;
+        }
+        return user;
+    }
+};
+AuthService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object])
+], AuthService);
+exports.AuthService = AuthService;
+
+
+/***/ }),
+
+/***/ "./apps/auth/src/strategies/jwt.strategy.ts":
+/*!**************************************************!*\
+  !*** ./apps/auth/src/strategies/jwt.strategy.ts ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.JwtStrategy = void 0;
+const passport_jwt_1 = __webpack_require__(/*! passport-jwt */ "passport-jwt");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
+    constructor() {
+        super({
+            jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: true,
+            secretOrKey: process.env.JWT_SECRET_KEY
+        });
+    }
+    async validate(payload) {
+        return { id: payload.sub, email: payload.email };
+    }
+}
+exports.JwtStrategy = JwtStrategy;
+
+
+/***/ }),
+
+/***/ "./apps/auth/src/strategies/local.strategy.ts":
+/*!****************************************************!*\
+  !*** ./apps/auth/src/strategies/local.strategy.ts ***!
+  \****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.LocalStrategy = void 0;
+const auth_service_1 = __webpack_require__(/*! ./../auth.service */ "./apps/auth/src/auth.service.ts");
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
+const passport_local_1 = __webpack_require__(/*! passport-local */ "passport-local");
+const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)(passport_local_1.Strategy) {
+    constructor(authService) {
+        super({
+            usernameField: 'email'
+        });
+        this.authService = authService;
+    }
+    async validate(email, password) {
+        const user = await this.authService.validateUser(email, password);
+        if (!user) {
+            throw new common_1.UnauthorizedException("Invalid and/or password/email");
+        }
+        return user;
+    }
+};
+LocalStrategy = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, common_1.Inject)(auth_service_1.AuthService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+], LocalStrategy);
+exports.LocalStrategy = LocalStrategy;
 
 
 /***/ }),
@@ -63,6 +303,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppModule = void 0;
+const auth_module_1 = __webpack_require__(/*! ./../../auth/src/auth.module */ "./apps/auth/src/auth.module.ts");
 const database_module_1 = __webpack_require__(/*! ./../../../libs/database/src/database.module */ "./libs/database/src/database.module.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const app_controller_1 = __webpack_require__(/*! ./app.controller */ "./apps/hardware-pieces/src/app.controller.ts");
@@ -72,7 +313,12 @@ let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [pieces_module_1.PiecesModule, user_module_1.UserModule, database_module_1.DatabaseModule],
+        imports: [
+            pieces_module_1.PiecesModule,
+            user_module_1.UserModule,
+            database_module_1.DatabaseModule,
+            auth_module_1.AuthModule
+        ],
         controllers: [app_controller_1.AppController],
         providers: [database_module_1.DatabaseModule],
     })
@@ -166,6 +412,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PiecesController = void 0;
+const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
 const create_piece_request_dto_1 = __webpack_require__(/*! ./dto/create-piece-request.dto */ "./apps/hardware-pieces/src/pieces/dto/create-piece-request.dto.ts");
 const pieces_service_1 = __webpack_require__(/*! ./pieces.service */ "./apps/hardware-pieces/src/pieces/pieces.service.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -216,6 +463,7 @@ __decorate([
 ], PiecesController.prototype, "deletePiece", null);
 PiecesController = __decorate([
     (0, common_1.Controller)('pieces'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __param(0, (0, common_1.Inject)(pieces_service_1.PiecesService)),
     __metadata("design:paramtypes", [typeof (_g = typeof pieces_service_1.PiecesService !== "undefined" && pieces_service_1.PiecesService) === "function" ? _g : Object])
 ], PiecesController);
@@ -407,6 +655,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var UserModule_1;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserModule = void 0;
 const user_provider_1 = __webpack_require__(/*! ./user.provider */ "./apps/hardware-pieces/src/user/user.provider.ts");
@@ -414,16 +663,17 @@ const database_module_1 = __webpack_require__(/*! ./../../../../libs/database/sr
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const user_service_1 = __webpack_require__(/*! ./user.service */ "./apps/hardware-pieces/src/user/user.service.ts");
 const user_controller_1 = __webpack_require__(/*! ./user.controller */ "./apps/hardware-pieces/src/user/user.controller.ts");
-let UserModule = class UserModule {
+let UserModule = UserModule_1 = class UserModule {
 };
-UserModule = __decorate([
+UserModule = UserModule_1 = __decorate([
     (0, common_1.Module)({
         imports: [database_module_1.DatabaseModule],
         providers: [
             user_service_1.UserService,
             ...user_provider_1.userProviders
         ],
-        controllers: [user_controller_1.UserController]
+        controllers: [user_controller_1.UserController],
+        exports: [UserModule_1, ...user_provider_1.userProviders]
     })
 ], UserModule);
 exports.UserModule = UserModule;
@@ -650,7 +900,9 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 User = __decorate([
-    (0, typeorm_1.Entity)({ name: "users" })
+    (0, typeorm_1.Entity)("users", {
+        synchronize: false
+    })
 ], User);
 exports.User = User;
 
@@ -668,6 +920,17 @@ module.exports = require("@nestjs/common");
 
 /***/ }),
 
+/***/ "@nestjs/config":
+/*!*********************************!*\
+  !*** external "@nestjs/config" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("@nestjs/config");
+
+/***/ }),
+
 /***/ "@nestjs/core":
 /*!*******************************!*\
   !*** external "@nestjs/core" ***!
@@ -676,6 +939,28 @@ module.exports = require("@nestjs/common");
 
 "use strict";
 module.exports = require("@nestjs/core");
+
+/***/ }),
+
+/***/ "@nestjs/jwt":
+/*!******************************!*\
+  !*** external "@nestjs/jwt" ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("@nestjs/jwt");
+
+/***/ }),
+
+/***/ "@nestjs/passport":
+/*!***********************************!*\
+  !*** external "@nestjs/passport" ***!
+  \***********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("@nestjs/passport");
 
 /***/ }),
 
@@ -701,6 +986,28 @@ module.exports = require("dotenv");
 
 /***/ }),
 
+/***/ "passport-jwt":
+/*!*******************************!*\
+  !*** external "passport-jwt" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("passport-jwt");
+
+/***/ }),
+
+/***/ "passport-local":
+/*!*********************************!*\
+  !*** external "passport-local" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("passport-local");
+
+/***/ }),
+
 /***/ "typeorm":
 /*!**************************!*\
   !*** external "typeorm" ***!
@@ -709,6 +1016,17 @@ module.exports = require("dotenv");
 
 "use strict";
 module.exports = require("typeorm");
+
+/***/ }),
+
+/***/ "path":
+/*!***********************!*\
+  !*** external "path" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("path");
 
 /***/ })
 

@@ -1,9 +1,11 @@
+import { AuthGuard } from '@nestjs/passport';
 import { CreateUpdatePieceRequestDto } from './dto/create-piece-request.dto';
 import { PiecesService } from './pieces.service';
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { Piece } from '@app/database/entities/piece.entity';
 
 @Controller('pieces')
+@UseGuards(AuthGuard('jwt'))
 export class PiecesController {
     constructor(@Inject(PiecesService) private piecesService: PiecesService) { }
     @Get()
