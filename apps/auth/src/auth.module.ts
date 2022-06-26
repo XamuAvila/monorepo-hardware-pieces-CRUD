@@ -21,8 +21,8 @@ dotenv.config({path: join(__dirname, "../../../.env")})
     PassportModule,
     ConfigModule.forRoot(),
     JwtModule.register({
-      privateKey: process.env.JWT_SECRET_KEY,
-      // signOptions: {expiresIn: '60s'}
+      privateKey: process.env.JWT_SECRET_KEY || "gPwjG1GCfzzIdYcHIM4ZjT0sbohPUc66X97duW94blI=",
+      signOptions: {expiresIn: '2h'}
     })
   ],
   controllers: [AuthController],

@@ -112,7 +112,8 @@ AuthModule = __decorate([
             passport_1.PassportModule,
             config_1.ConfigModule.forRoot(),
             jwt_1.JwtModule.register({
-                privateKey: process.env.JWT_SECRET_KEY,
+                privateKey: process.env.JWT_SECRET_KEY || "gPwjG1GCfzzIdYcHIM4ZjT0sbohPUc66X97duW94blI=",
+                signOptions: { expiresIn: '2h' }
             })
         ],
         controllers: [auth_controller_1.AuthController],
