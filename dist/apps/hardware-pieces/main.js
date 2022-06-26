@@ -39,9 +39,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthController = void 0;
+const auth_request_dto_1 = __webpack_require__(/*! ./dto/auth-request.dto */ "./apps/auth/src/dto/auth-request.dto.ts");
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
@@ -57,16 +58,16 @@ let AuthController = class AuthController {
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('local')),
     (0, common_1.Post)('login'),
-    __param(0, (0, common_1.Req)()),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [typeof (_a = typeof auth_request_dto_1.AuthRequestDto !== "undefined" && auth_request_dto_1.AuthRequestDto) === "function" ? _a : Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "login", null);
 AuthController = __decorate([
     (0, common_1.Controller)('api/auth'),
     (0, swagger_1.ApiTags)('Auth'),
     __param(0, (0, common_1.Inject)(auth_service_1.AuthService)),
-    __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _b : Object])
 ], AuthController);
 exports.AuthController = AuthController;
 
@@ -178,6 +179,41 @@ AuthService = __decorate([
     __metadata("design:paramtypes", [typeof (_a = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object])
 ], AuthService);
 exports.AuthService = AuthService;
+
+
+/***/ }),
+
+/***/ "./apps/auth/src/dto/auth-request.dto.ts":
+/*!***********************************************!*\
+  !*** ./apps/auth/src/dto/auth-request.dto.ts ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthRequestDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class AuthRequestDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], AuthRequestDto.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], AuthRequestDto.prototype, "password", void 0);
+exports.AuthRequestDto = AuthRequestDto;
 
 
 /***/ }),
@@ -467,6 +503,7 @@ __decorate([
 ], PiecesController.prototype, "deletePiece", null);
 PiecesController = __decorate([
     (0, common_1.Controller)('pieces'),
+    (0, swagger_1.ApiBearerAuth)('token'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, swagger_1.ApiTags)('Pieces'),
     __param(0, (0, common_1.Inject)(pieces_service_1.PiecesService)),
@@ -572,15 +609,38 @@ exports.PiecesService = PiecesService;
 /*!**********************************************************************!*\
   !*** ./apps/hardware-pieces/src/user/dto/create-user.request.dto.ts ***!
   \**********************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CreateUpdateUserRequestDto = void 0;
-class CreateUpdateUserRequestDto {
+exports.CreateUserRequestDto = void 0;
+const user_entity_1 = __webpack_require__(/*! @app/database/entities/user.entity */ "./libs/database/src/entities/user.entity.ts");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+class CreateUserRequestDto extends user_entity_1.User {
 }
-exports.CreateUpdateUserRequestDto = CreateUpdateUserRequestDto;
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreateUserRequestDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateUserRequestDto.prototype, "price", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], CreateUserRequestDto.prototype, "quantityStock", void 0);
+exports.CreateUserRequestDto = CreateUserRequestDto;
 
 
 /***/ }),
@@ -605,7 +665,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserController = void 0;
 const passport_1 = __webpack_require__(/*! @nestjs/passport */ "@nestjs/passport");
@@ -623,12 +683,15 @@ let UserController = class UserController {
     getUser(email) {
         return this.userService.findOne(email);
     }
+    getUsers() {
+        return this.userService.findAll();
+    }
 };
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_a = typeof create_user_request_dto_1.CreateUpdateUserRequestDto !== "undefined" && create_user_request_dto_1.CreateUpdateUserRequestDto) === "function" ? _a : Object]),
+    __metadata("design:paramtypes", [typeof (_a = typeof create_user_request_dto_1.CreateUserRequestDto !== "undefined" && create_user_request_dto_1.CreateUserRequestDto) === "function" ? _a : Object]),
     __metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
 ], UserController.prototype, "createUser", null);
 __decorate([
@@ -638,12 +701,18 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], UserController.prototype, "getUser", null);
+__decorate([
+    (0, common_1.Get)('users'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+], UserController.prototype, "getUsers", null);
 UserController = __decorate([
     (0, common_1.Controller)('user'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, swagger_1.ApiTags)('Users'),
     __param(0, (0, common_1.Inject)(user_service_1.UserService)),
-    __metadata("design:paramtypes", [typeof (_d = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _d : Object])
+    __metadata("design:paramtypes", [typeof (_e = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _e : Object])
 ], UserController);
 exports.UserController = UserController;
 
@@ -740,6 +809,9 @@ const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 let UserService = class UserService {
     constructor(userRepository) {
         this.userRepository = userRepository;
+    }
+    async findAll() {
+        return this.userRepository.find();
     }
     async findOne(email) {
         return this.userRepository.findOne({ where: { login: email } });
@@ -995,6 +1067,17 @@ module.exports = require("dotenv");
 
 /***/ }),
 
+/***/ "express-basic-auth":
+/*!*************************************!*\
+  !*** external "express-basic-auth" ***!
+  \*************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("express-basic-auth");
+
+/***/ }),
+
 /***/ "passport-jwt":
 /*!*******************************!*\
   !*** external "passport-jwt" ***!
@@ -1079,12 +1162,26 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __webpack_require__(/*! @nestjs/core */ "@nestjs/core");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const app_module_1 = __webpack_require__(/*! ./app.module */ "./apps/hardware-pieces/src/app.module.ts");
+const basicAuth = __webpack_require__(/*! express-basic-auth */ "express-basic-auth");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    app.use(['/docs', '/docs-json'], basicAuth({
+        challenge: true,
+        users: {
+            sam: '1234',
+        },
+    }));
     const config = new swagger_1.DocumentBuilder()
         .setTitle('Pc Pieces')
         .setVersion('1.0')
-        .addBearerAuth()
+        .addBearerAuth({
+        description: `Please enter token in following format: Bearer <JWT>`,
+        name: 'Authorization',
+        bearerFormat: 'JWT',
+        scheme: 'Bearer',
+        type: 'http',
+        in: 'Header',
+    }, 'token')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api', app, document, {
