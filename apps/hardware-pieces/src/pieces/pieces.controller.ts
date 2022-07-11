@@ -28,7 +28,7 @@ export class PiecesController {
     }
 
     @Delete(':id')
-    deletePiece(@Param('id') id:number):Promise<void>{
+    deletePiece(@Param('id') id:string):Promise<void>{
         return this.piecesService.deletePiece(id);
     }
 }

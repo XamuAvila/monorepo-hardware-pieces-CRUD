@@ -20,7 +20,7 @@ export class PiecesService {
         return await this.pieceRepository.findOne({where:{id:id}});
     }
 
-    async deletePiece(id:number):Promise<void>{
+    async deletePiece(id:string):Promise<void>{
         await this.pieceRepository.delete(id);
     }
 }
